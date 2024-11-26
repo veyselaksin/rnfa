@@ -50,7 +50,7 @@ const defaultStyles = StyleSheet.create({
         width: '100%'
     },
     buttonDisabled: {
-        backgroundColor: colors.dark.input.backgroundColor,
+        backgroundColor: colors.dark.input.backgroundColor
     },
     buttonText: {
         color: colors.dark.black,

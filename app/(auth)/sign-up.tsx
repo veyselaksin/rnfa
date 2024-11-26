@@ -6,26 +6,31 @@ import CButton from '@/components/CButton'
 import colors from '@/constants/color'
 import images from '@/constants/images'
 import { fontSize, gap, margin, padding } from '@/constants/style'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { FIREBASE_AUTH, FIREBASE_DB } from '@/libs/firebase/firebase'
+import { doc, setDoc } from 'firebase/firestore'
+import { registerWithEmailAndPassword } from '@/libs/firebase/auth'
+import { storage } from '@/store/mmkv'
 
 const SignUp = () => {
-    const [username, setUsername] = useState('')
+    const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [usernameError, setUsernameError] = useState('')
+    const [fullNameError, setFullNameError] = useState('')
     const [emailError, setEmailError] = useState('')
     const [passwordError, setPasswordError] = useState('')
 
-    const validateUsername = (text: string) => {
-        setUsername(text)
+    const validateFullName = (text: string) => {
+        setFullName(text)
         if (text.length < 3) {
-            setUsernameError('Username must be at least 3 characters long')
+            setFullNameError('Full name must be at least 3 characters long')
         } else {
-            setUsernameError('')
+            setFullNameError('')
         }
     }
 
     const validateEmail = (text: string) => {
-        setEmail(text)
+        setEmail(text.toLowerCase())
         if (!text.includes('@')) {
             setEmailError('Please enter a valid email address')
         } else {
@@ -42,12 +47,16 @@ const SignUp = () => {
         }
     }
 
-    const isFormValid = username.length >= 3 && email.includes('@') && password.length >= 8
+    const isFormValid = fullName.length >= 3 && email.includes('@') && password.length >= 8
 
-    const handleSignUp = () => {
+    const handleSignUp = async () => {
         if (isFormValid) {
-            // Implement sign up logic here
-            console.log('Sign up with:', username, email, password)
+            const response = await registerWithEmailAndPassword(email, password, fullName)
+            // then redirect to home
+            if (response) {
+                storage.set('user', JSON.stringify(response))
+                router.push('/home')
+            }
         }
     }
 
@@ -60,29 +69,9 @@ const SignUp = () => {
                         <Text style={styles.title}>Sign Up for Aora</Text>
                     </View>
                     <View style={styles.form}>
-                        <FormField
-                            label='Username'
-                            placeholder='Enter your username'
-                            value={username}
-                            onChangeText={validateUsername}
-                            error={usernameError}
-                        />
-                        <FormField
-                            label='Email'
-                            placeholder='Enter your email'
-                            value={email}
-                            onChangeText={validateEmail}
-                            keyboardType='email-address'
-                            error={emailError}
-                        />
-                        <FormField
-                            label='Password'
-                            placeholder='Enter your password'
-                            value={password}
-                            onChangeText={validatePassword}
-                            secureTextEntry
-                            error={passwordError}
-                        />
+                        <FormField label='Full Name' placeholder='Enter your full name' value={fullName} onChangeText={validateFullName} error={fullNameError} />
+                        <FormField label='Email' placeholder='Enter your email' value={email} onChangeText={validateEmail} keyboardType='email-address' error={emailError} />
+                        <FormField label='Password' placeholder='Enter your password' value={password} onChangeText={validatePassword} secureTextEntry error={passwordError} />
                         <CButton onPress={handleSignUp} disabled={!isFormValid}>
                             Sign Up
                         </CButton>
@@ -102,43 +91,43 @@ const SignUp = () => {
 const styles = StyleSheet.create({
     safeArea: {
         backgroundColor: colors.dark.primary,
-        flex: 1,
+        flex: 1
     },
     scrollViewContent: {
-        flexGrow: 1,
+        flexGrow: 1
     },
     container: {
         flex: 1,
         paddingHorizontal: padding.md,
-        paddingTop: margin.xl,
+        paddingTop: margin.xl
     },
     headerContainer: {
         alignItems: 'center',
-        marginBottom: margin.lg,
+        marginBottom: margin.lg
     },
     logo: {
         width: 160,
         height: 50,
-        marginBottom: margin.md,
+        marginBottom: margin.md
     },
     title: {
         fontSize: fontSize.lg,
         fontWeight: '700',
-        color: colors.dark.white,
+        color: colors.dark.white
     },
     form: {
         width: '100%',
-        gap: gap.lg,
+        gap: gap.lg
     },
     signIn: {
         color: colors.dark.text.secondary,
         fontSize: fontSize.md,
-        textAlign: 'center',
+        textAlign: 'center'
     },
     signInLink: {
         color: colors.dark.secondary,
-        fontWeight: '700',
-    },
+        fontWeight: '700'
+    }
 })
 
 export default SignUp

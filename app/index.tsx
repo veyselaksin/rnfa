@@ -5,9 +5,16 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import colors from '@/constants/color'
 import { fontSize, margin, padding, radius } from '@/constants/style'
 import React from 'react'
-import { router } from 'expo-router'
+import { Redirect, router } from 'expo-router'
+import { storage } from '@/store/mmkv'
 
 const Index = () => {
+    const user = storage.getString('user')
+
+    if (user) {
+        return <Redirect href='/home' />
+    }
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <ScrollView contentContainerStyle={styles.scrollView}>

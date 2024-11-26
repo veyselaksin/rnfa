@@ -16,24 +16,15 @@ type FormFieldProps = {
 
 const FormField: React.FC<FormFieldProps> = ({ label, secureTextEntry, error, ...props }) => {
     const [showPassword, setShowPassword] = useState(false)
-    
+
     return (
         <View style={styles.container}>
             {label && <Text style={styles.label}>{label}</Text>}
             <View style={[styles.inputContainer, error && styles.inputContainerError]}>
-                <TextInput
-                    style={styles.input}
-                    placeholderTextColor={colors.dark.text.secondary}
-                    secureTextEntry={secureTextEntry && !showPassword}
-                    {...props}
-                />
+                <TextInput style={styles.input} placeholderTextColor={colors.dark.text.secondary} secureTextEntry={secureTextEntry && !showPassword} {...props} />
                 {secureTextEntry && (
                     <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                        {showPassword ? (
-                            <IconEyeOff style={styles.togglePasswordIcon} />
-                        ) : (
-                            <IconEye style={styles.togglePasswordIcon} />
-                        )}
+                        {showPassword ? <IconEyeOff style={styles.togglePasswordIcon} /> : <IconEye style={styles.togglePasswordIcon} />}
                     </TouchableOpacity>
                 )}
             </View>
@@ -59,24 +50,24 @@ const styles = StyleSheet.create({
         backgroundColor: colors.dark.input.backgroundColor,
         borderRadius: radius.md,
         borderWidth: 2,
-        borderColor: colors.dark.input.borderColor,
+        borderColor: colors.dark.input.borderColor
     },
     inputContainerError: {
-        borderColor: colors.dark.error,
+        borderColor: colors.dark.error
     },
     input: {
         flex: 1,
         color: colors.dark.white,
         fontSize: fontSize.md,
         paddingVertical: padding.sm,
-        paddingHorizontal: padding.sm,
+        paddingHorizontal: padding.sm
     },
     togglePasswordIcon: {
         color: colors.dark.text.secondary,
-        paddingRight: padding.xl,
+        paddingRight: padding.xl
     },
     errorText: {
         color: colors.dark.error,
-        fontSize: fontSize.sm,
+        fontSize: fontSize.sm
     }
 })
