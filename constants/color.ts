@@ -8,7 +8,8 @@ const colors = {
         text: {
             primary: '#FFFFFF',
             secondary: '#E5E7EB' // tailwind gray-200
-        }
+        },
+        red: '#EF4444' // tailwind red-500
     },
     dark: {
         primary: '#161622',
@@ -24,7 +25,8 @@ const colors = {
         text: {
             primary: '#FFFFFF',
             secondary: '#E5E7EB' // tailwind gray-200
-        }
+        },
+        red: '#EF4444' // tailwind red-500
     }
 }
 
